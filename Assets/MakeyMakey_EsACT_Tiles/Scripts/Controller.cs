@@ -16,6 +16,7 @@ public class Controller : MonoBehaviour {
     }
 
     [Header("References:")]
+
     [SerializeField] RectTransform StartScreen;
     [SerializeField] Image ImageDisplayer;
     [SerializeField] AudioSource AudioSource;
@@ -34,7 +35,6 @@ public class Controller : MonoBehaviour {
     [SerializeField] UnityEvent OnSpacePress;
     [SerializeField] UnityEvent OnClickPress;
 
-    bool _enableVideoAudio = false;
     ViewMode _currentMode = ViewMode.Image;
     int _currentClipIndex = -1;
 
@@ -84,9 +84,6 @@ public class Controller : MonoBehaviour {
 
     // --------- | Utility
 
-    public void EnableVideoAudio(bool enable) {
-        _enableVideoAudio = enable;
-    }
 
     private void ToggleMode(ViewMode to) {
         if (StartScreen.gameObject.activeSelf)
@@ -169,11 +166,16 @@ public class Controller : MonoBehaviour {
         if (_randomVideoCoroutine != null)
             StopCoroutine(_randomVideoCoroutine);
 
-        AudioSource.volume = _enableVideoAudio ? 1f : 0f;
 
         _currentClipIndex = index;
         VideoPlayer.clip = VideoClips[index];
         VideoPlayer.Play();
+
+    }
+
+
+    public void SetVolume(float value) {
+        AudioSource.volume = value > 1 ? 1 : value < 0 ? 0 : value;
 
     }
 
